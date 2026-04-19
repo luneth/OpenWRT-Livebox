@@ -116,7 +116,6 @@ config interface 'wan6'
         option noacceptreconfig '1'
         option iface_dslite '0'
         option device 'eth0.832' # A remplacer par votre interface
-        option sourcefilter '0'
         option dscp '6'
         option skpriority '6'
         option clientid '00030001A23456781926' # Doit correspondre à 00030001 + l'adresse mac sans les : de votre interface vlan 832 !
