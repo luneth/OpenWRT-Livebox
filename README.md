@@ -123,6 +123,7 @@ config interface 'wan6'
 ```
 
 NFT rules, on créé un fichier contenant nos règles (pour le remapping l2 des flux), qui sera lancé en même temps que le firewall
+
 Installez kmod-nft-netdev:
 ```
 apk update && apk install kmod-nft-netdev
