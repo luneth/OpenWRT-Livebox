@@ -1,0 +1,5 @@
+theme: jekyll-theme-minimal
+title: "OpenWrt - Orange France FTTH"
+description: "Tutoriel vous permettant de remplacer votre Livebox par un routeur avec système d'exploitation Linux Openwrt. DHCP via VLAN 832, Livebox 6 spoofing, XAUTH auto-renewal, IPv6 DHCPv6 & TV."
+plugins:
+  - jekyll-sitemap
