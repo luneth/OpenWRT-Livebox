@@ -97,7 +97,7 @@ config interface 'wan4'
         option force_link '1'
         option device 'eth0.832' # A remplacer par votre interface
         option norelease '1' 
-        option clientid '01A23456781926' # Doit correspondre à 01 + l'adresse mac sans les : de votre interface vlan 832 !
+        option clientid '01A23456781926' # Doit correspondre à 01 + l'adresse mac sans les : de votre interface vlan 832 !
 ```
 - Config Wan ipv6
 ```
