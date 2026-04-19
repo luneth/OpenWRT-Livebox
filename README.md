@@ -258,7 +258,7 @@ config rule
 	list icmp_type 'echo-request'
 	list icmp_type 'packet-too-big'
 	list icmp_type 'time-exceeded'
-        list icmp_type 'parameter-problem'
+    list icmp_type 'parameter-problem'
 	list icmp_type 'unknown-header-type'
 	option src 'wan6'  
 ```
