@@ -122,7 +122,11 @@ config interface 'wan6'
         option clientid '00030001A23456781926' # Doit correspondre à 00030001 + l'adresse mac sans les : de votre interface vlan 832 !
 ```
 
-NFT rules, on créé un fichier contenant nos règles (pour le remapping l2 des flux), qui sera lancé en même temps que le firewall  
+NFT rules, on créé un fichier contenant nos règles (pour le remapping l2 des flux), qui sera lancé en même temps que le firewall
+Installez kmod-nft-netdev:
+```
+apk update && apk install kmod-nft-netdev
+```
 *Pensez à modifier “type filter hook egress device "eth0.832" priority 0; policy accept;” en fonction de votre interface*
 
 **nano /etc/nftables.d/orange-prio.include**
