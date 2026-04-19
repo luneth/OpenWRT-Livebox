@@ -294,7 +294,7 @@ Commandes utiles pour vérifier tout ça  :
 **ifstatus wan4**  
 **ifstatus wan6** 
 
-# __PARTIE 2 : Auto-gen de l'option 90 & Heathchecks__
+# __PARTIE 2 : Auto-gen de l'option 90/11 & Heathchecks__
 **Génération automatique de l'option 90**
 
 Même si pour certains (moi y compris) garder l'option 90 générée au début du tutoriel ne pose pas de soucis, l'identification auprès d'orange est sensée être re-générée régulièrement.  
