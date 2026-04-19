@@ -295,7 +295,7 @@ Commandes utiles pour vérifier tout ça  :
 **ifstatus wan6** 
 
 # __PARTIE 2 : Auto-gen de l'option 90/11 & Heathchecks__
-**Génération automatique de l'option 90**
+## Génération automatique de l'option 90
 
 Même si pour certains (moi y compris) garder l'option 90 générée au début du tutoriel ne pose pas de soucis, l'identification auprès d'orange est sensée être re-générée régulièrement.  
 
@@ -435,7 +435,7 @@ ln -s /etc/config/orange-auth-init.sh /etc/init.d/orange-auth
 /etc/init.d/orange-auth enable
 ```
 
-**Tests de vie**
+## Tests de vie
 
 Comme expliqué [ici](https://lafibre.info/remplacer-livebox/durcissement-du-controle-de-loption-9011-et-de-la-conformite-protocolaire/), il est recommandé de vérifier l'état de votre connections. Le script suivant suit exactement ces recommandations:  
 - IPv4 : faire une séquence ARP Request / Reply vers l'adresse du routeur donné en DHCPv4  
