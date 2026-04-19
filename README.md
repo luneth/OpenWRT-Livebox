@@ -434,7 +434,7 @@ ln -s /etc/config/orange-auth-init.sh /etc/init.d/orange-auth
 /etc/init.d/orange-auth enable
 ```
 
-**__Tests de vie__**
+**Tests de vie**
 
 Comme expliqué [ici](https://lafibre.info/remplacer-livebox/durcissement-du-controle-de-loption-9011-et-de-la-conformite-protocolaire/), il est recommandé de vérifier l'état de votre connections. Le script suivant suit exactement ces recommandations:  
 - IPv4 : faire une séquence ARP Request / Reply vers l'adresse du routeur donné en DHCPv4  
