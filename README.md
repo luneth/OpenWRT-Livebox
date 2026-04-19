@@ -560,13 +560,13 @@ config igmpproxy
 
 config phyint
     option network tvorange
-    option zone wanTV # 18.06.02
+    option zone wantv
     option direction upstream
         list altnet "0.0.0.0/0"
 
 config phyint lan
     option network lan
-    option zone lan # 18.06.02
+    option zone lan
     option direction downstream
 ```
 
@@ -625,7 +625,7 @@ config dhcp 'lan'
 Et pour finir, on modifie le fichier /etc/config/firewall pour créer la zone WanTV et les règles associées :
 ```
 config zone
-	option name 'wanTV'
+	option name 'wantv'
 	option output 'ACCEPT'
 	option masq '1'
 	option network 'tvorange'
@@ -636,21 +636,21 @@ config zone
 
 config forwarding
 	option src 'lan'
-	option dest 'wanTV'
+	option dest 'wantv'
 
 config rule
 	option target 'ACCEPT'
 	option name 'igmp'
 	option family 'ipv4'
 	option proto 'igmp'
-	option src 'wanTV'
+	option src 'wantv'
 
 config rule
 	option target 'ACCEPT'
 	option name 'multicast'
 	option family 'ipv4'
 	option proto 'udp'
-	option src 'wanTV'
+	option src 'wantv'
 	option dest 'lan'
 	option dest_ip '224.0.0.0/4'
 ```
