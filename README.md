@@ -5,19 +5,19 @@ Guide lourdement basé (pour ainsi dire, copié à 99% sur le travail de ubune (
 Le but étant de centraliser toutes ces informations à un seul endroit.
 
 
-**__Prerequis :__**  
+**Prerequis :**  
   
 Avoir un ONT Orange ou un ONT perso bien connecté/auth avec l'OLT, Leox LXT-010H-D, fs.com GPON-ONU-34-20BI, etc…  
 Avoir récupéré ses identifiants FTI.  
 Un routeur compatible openwrt et avec assez de perf pour gérer le débit de votre offre.  
   
-**__Informations sur Openwrt =>__**  
+**Informations sur Openwrt =>**  
   
 Pour récupérer votre version, il faut identifier le soc de votre routeur, exemple sur un ubiquiti edgerouterx => <https://openwrt.org/toh/hwdata/ubiquiti/ubiquiti_edgerouter_x>  
 On retrouve dans target : ramips et subtarget : mt7621.  
 Une fois ces éléments identifiés, on peut aller sur <https://downloads.openwrt.org> pour récupérer la version correspondante.  
   
-**__Présentation rapide de l'architecture Openwrt :__**  
+**Présentation rapide de l'architecture Openwrt :**  
   
 Sur Openwrt, vos fichiers de configurations se trouvent dans **/etc/config**, par exemple par défaut on retrouve :  
 **/etc/config/network** pour la configuration des interfaces réseau, des routes statiques...  
@@ -290,7 +290,7 @@ Commandes utiles pour vérifier tout ça  :
 **ifstatus wan6** 
 
 # __PARTIE 2 : Auto-gen de l'option 90 & Heathchecks__
-**__Génération automatique de l'option 90__**
+**Génération automatique de l'option 90**
 
 Même si pour certains (moi y compris) garder l'option 90 générée au début du tutoriel ne pose pas de soucis, l'identification auprès d'orange est sensée être re-générée régulièrement.  
 
