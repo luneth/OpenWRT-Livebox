@@ -124,7 +124,7 @@ config interface 'wan6'
 
 NFT rules, on créé un fichier contenant nos règles (pour le remapping l2 des flux), qui sera lancé en même temps que le firewall
 
-Installez kmod-nft-netdev:
+**Installez kmod-nft-netdev:**
 ```
 apk update && apk install kmod-nft-netdev
 ```
@@ -300,6 +300,7 @@ Commandes utiles pour vérifier tout ça  :
 Même si pour certains (moi y compris) garder l'option 90 générée au début du tutoriel ne pose pas de soucis, l'identification auprès d'orange est sensée être re-générée régulièrement.  
 
 *Modifiez Login et PASSWORD avec vos identifiants*
+
 **nano /etc/config/orange-auth**
 
 ```
