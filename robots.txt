@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://luneth.github.io/OpenWRT-Livebox//sitemap.xml
