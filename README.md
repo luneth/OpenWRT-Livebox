@@ -375,7 +375,7 @@ logger -t orange-auth "Auth applied salt=${SALT} len=$(echo -n "$AUTH" | wc -c)"
 
 # Init script to generate AUTH on boot - renews auth to avoid Orange expiry
 
-# integration in openwrt 25.02
+# integration in openwrt 25.12
 # ln -s /etc/config/orange-auth-init.sh /etc/init.d/orange-auth
 # /etc/init.d/orange-auth enable
 
@@ -392,7 +392,7 @@ start() {
 
 # Orange hotplug script - renews AUTH on wan ifdown to avoid Orange rejecting old auth
 
-# integration in openwrt 25.02
+# integration in openwrt 25.12
 # ln -s /etc/config/97-orange-config /etc/hotplug.d/iface/97-orange-config
 
 case "$ACTION/$INTERFACE" in
@@ -410,7 +410,7 @@ esac
 
 # Delays wan6 ifup until wan DHCP completes - prevents wan6 failure on Orange network
 
-# integration in openwrt 25.02
+# integration in openwrt 25.12
 # ln -s /etc/config/99-wan6-delay /etc/hotplug.d/iface/99-wan6-delay
 
 case "$ACTION/$INTERFACE" in
