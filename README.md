@@ -1,6 +1,6 @@
 # Remplacer une Livebox par un routeur OpenWrt (ipv4,ipv6 & TV).
 
-Guide lourdement basé (pour ainsi dire, copié à 99% sur le travail de ubune (sujet sur [lafibre.info](https://lafibre.info/remplacer-livebox/remplacement-de-la-livebox-par-un-routeur-openwrt-18-dhcp-v4v6-tv) & Github [repo](https://github.com/ubune/openwrt-livebox) ), golfromeo-fr (Github [repo](https://github.com/golfromeo-fr/openwrt-turris-omnia-orange-france) ), [l'expertise](https://lafibre.info/remplacer-livebox/durcissement-du-controle-de-loption-9011-et-de-la-conformite-protocolaire/) de levieuxatorange et des differents posts sur [lafibre.info](https://lafibre.info/index.php)
+Guide lourdement basé (pour ainsi dire, copié à 99% sur le travail de ubune (sujet sur [lafibre.info](https://lafibre.info/remplacer-livebox/remplacement-de-la-livebox-par-un-routeur-openwrt-18-dhcp-v4v6-tv) & Github [repo](https://github.com/ubune/openwrt-livebox) ), [chat_roux](https://lafibre.info/remplacer-livebox/remplacement-de-la-livebox-par-un-routeur-openwrt-18-dhcp-v4v6-tv/msg1147909/#msg1147909) (aka golfromeo-fr) (Github [repo](https://github.com/golfromeo-fr/openwrt-turris-omnia-orange-france) ), [l'expertise](https://lafibre.info/remplacer-livebox/durcissement-du-controle-de-loption-9011-et-de-la-conformite-protocolaire/) de levieuxatorange et des differents posts sur [lafibre.info](https://lafibre.info/index.php)
 
 Le but étant de centraliser toutes ces informations à un seul endroit.
 
