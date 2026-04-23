@@ -107,7 +107,7 @@ config interface 'wan6'
         option reqaddress 'none'
         option reqprefix 'auto'
         option defaultreqopts '0'
-        list sendopts '15:FSVDSL_livebox.Internet.softathome.livebox6' # User Class
+        list sendopts '15:FSVDSL_livebox.Internet.softathome.Livebox6' # User Class
         list sendopts '16:0000040e0005736167656d' # Vendor Class: 0000040e0005736167656d = sagem
         list sendopts '17:000005580006000e495056365f524551554553544544' # IPv6_REQUESTED
         list sendopts '11:00000000000000000000001a090000055801034101116674692F6674692F717071383838383c1231323334353637383930313233343536031341302f6f2d83fc857d7829d65ddea775d7' # XAUT: à remplacer par votre chaine générée précédemment
