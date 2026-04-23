@@ -85,7 +85,7 @@ config interface 'wan4'
         option broadcast '1'
         option hostname 'livebox'
         option vendorid 'sagem'
-        option userclass 'FSVDSL_livebox.Internet.softathome.livebox6'
+        option userclass 'FSVDSL_livebox.Internet.softathome.Livebox6'
         option reqopts '1 3 6 15 28 51 58 59 90 119 120 125'
         option macaddr 'A2:34:56:78:19:26' # Remplacer par l'adresse mac sans les : de votre interface vlan
         option auto '1'
