@@ -457,7 +457,8 @@ IF6="wan6"
 
 
 MAX_RETRY=3
-TIMEOUT=10
+TIMEOUT=3
+COOLDOWN=10
 
 get_gw4() {
     ubus call network.interface.$IF4 status | jsonfilter -e '@["route"][0].nexthop'
@@ -474,7 +475,9 @@ check_ipv4() {
     COUNT=0
     while [ $COUNT -lt $MAX_RETRY ]; do
         arping -I $DEV -c 1 -w $TIMEOUT $GWv4 >/dev/null 2>&1 && return 0
+        logger -t wan-watchdog "IPv4 check failed (attempt $COUNT/$MAX_RETRY)"
         COUNT=$((COUNT+1))
+        [ $COUNT -le $MAX_RETRY ] && sleep $COOLDOWN
     done
     return 1
 }
@@ -488,7 +491,9 @@ check_ipv6() {
     COUNT=0
     while [ $COUNT -lt $MAX_RETRY ]; do
         ping6 -c 1 -W $TIMEOUT $GWv6 >/dev/null 2>&1 && return 0
+        logger -t wan-watchdog IPv6 check failed (attempt $COUNT/$MAX_RETRY)"
         COUNT=$((COUNT+1))
+        [ $COUNT -le $MAX_RETRY ] && sleep $COOLDOWN
     done
     return 1
 }
