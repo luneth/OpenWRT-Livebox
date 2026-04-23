@@ -92,7 +92,7 @@ config interface 'wan4'
         list sendopts '61:01A23456781926' # Remplacer par 01 + l'adresse mac sans les : de votre interface vlan
         list sendopts '12:6c697665626f78'# Hostname: 6c697665626f78 = livebox
         list sendopts '60:736167656d' # Vendor Class: 736167656d = sagem
-        list sendopts '77:2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836' # User Class: 2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836 = FSVDSL_livebox.Internet.softathome.livebox6
+        list sendopts '77:2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836' # User Class: 2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836 = FSVDSL_livebox.Internet.softathome.Livebox6
         list sendopts '90:00000000000000000000001a090000055801034101116674692F6674692F717071383838383c1231323334353637383930313233343536031341302f6f2d83fc857d7829d65ddea775d7' # XAUT: à remplacer par votre chaine générée précédemment
         option force_link '1'
         option device 'eth0.832' # A remplacer par votre interface
