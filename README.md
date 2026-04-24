@@ -469,7 +469,7 @@ get_gw6() {
 }
 
 check_ipv4() {
-    COUNT=0
+    COUNT=1
     while [ $COUNT -le $MAX_RETRY ]; do
         GWv4=$(get_gw4)
         [ -n "$GWv4" ] && break
@@ -480,7 +480,7 @@ check_ipv4() {
 
     [ -z "$GWv4" ] && return 1
 
-    COUNT=0
+    COUNT=1
     while [ $COUNT -le $MAX_RETRY ]; do
         arping -I $DEV -c 1 -w $TIMEOUT $GWv4 >/dev/null 2>&1 && return 0
         logger -t wan-watchdog "IPv4 gateway unreachable (attempt $COUNT/$MAX_RETRY)"
@@ -491,7 +491,7 @@ check_ipv4() {
 }
 
 check_ipv6() {
-    COUNT=0
+    COUNT=1
     while [ $COUNT -le $MAX_RETRY ]; do
         GWv6=$(get_gw6)
         [ -n "$GWv6" ] && break
@@ -502,7 +502,7 @@ check_ipv6() {
 
     GWv6="${GWv6}%${DEV}"
 
-    COUNT=0
+    COUNT=1
     while [ $COUNT -le $MAX_RETRY ]; do
         ping6 -c 1 -W $TIMEOUT $GWv6 >/dev/null 2>&1 && return 0
         logger -t wan-watchdog "IPv6 gateway unreachable (attempt $COUNT/$MAX_RETRY)"
