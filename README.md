@@ -491,7 +491,7 @@ check_ipv6() {
     COUNT=0
     while [ $COUNT -lt $MAX_RETRY ]; do
         ping6 -c 1 -W $TIMEOUT $GWv6 >/dev/null 2>&1 && return 0
-        logger -t wan-watchdog IPv6 check failed (attempt $COUNT/$MAX_RETRY)"
+        logger -t wan-watchdog "IPv6 check failed (attempt $COUNT/$MAX_RETRY)"
         COUNT=$((COUNT+1))
         [ $COUNT -le $MAX_RETRY ] && sleep $COOLDOWN
     done
