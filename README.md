@@ -471,7 +471,7 @@ get_gw6() {
 check_ipv4() {
     GWv4=$(get_gw4)
     [ -z "$GWv4" ] && {
-        echo "failed to get IPv4 gateway"
+        logger -t wan-watchdog "failed to get IPv4 gateway"
         return 1
     }
 
