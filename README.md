@@ -470,7 +470,10 @@ get_gw6() {
 
 check_ipv4() {
     GWv4=$(get_gw4)
-    [ -z "$GWv4" ] && return 1
+    [ -z "$GWv4" ] && {
+        echo "failed to get IPv4 gateway"
+        return 1
+    }
 
     COUNT=0
     while [ $COUNT -lt $MAX_RETRY ]; do
@@ -484,7 +487,10 @@ check_ipv4() {
 
 check_ipv6() {
     GWv6=$(get_gw6)
-    [ -z "$GWv6" ] && return 1
+    [ -z "$GWv6" ] && {
+        logger -t wan-watchdog "failed to get IPv6 gateway"
+        return 1
+    }
 
     GWv6="${GWv6}%${DEV}"
 
