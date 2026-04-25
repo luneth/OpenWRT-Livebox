@@ -137,7 +137,7 @@ flush table netdev orange-rules
 
 table netdev orange-rules {
         chain orange-rules-chain {
-                type filter hook egress device "eth0.832" priority 0; policy accept; 
+                type filter hook egress device "eth0" priority 0; policy accept; 
                 vlan type ip6 udp dport 547 vlan pcp set 6 ip6 dscp set cs6 counter accept
                 vlan type ip6 icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit } vlan pcp set 6 ip6 dscp set cs6 counter accept
                 vlan type ip6 ip6 dscp set cs0 counter accept
