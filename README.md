@@ -445,7 +445,8 @@ Comme expliqué [ici](https://lafibre.info/remplacer-livebox/durcissement-du-con
   - au 3ème timeout (donc au total 150s de timeout), considérer que la liaison est en échec  
 relancer CE stack
 
-*Penser à modifier DEV=”eth0.832” en fonction de votre interface*
+*Pensez à modifier DEV=”eth0.832” en fonction de votre interface*
+
 **nano /etc/config/wan-watchdog.sh**
 
 ```
