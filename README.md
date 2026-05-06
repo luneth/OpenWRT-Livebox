@@ -127,7 +127,7 @@ NFT rules, on créé un fichier contenant nos règles (pour le remapping l2 des 
 ```
 apk update && apk install kmod-nft-netdev
 ```
-*Pensez à modifier “type filter hook egress device "eth0.832" priority 0; policy accept;” en fonction de votre interface*
+*Pensez à modifier “type filter hook egress device "eth0" priority 0; policy accept;” en fonction de votre interface*
 
 **nano /etc/nftables.d/orange-prio.include**
 
