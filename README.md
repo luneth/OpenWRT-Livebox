@@ -436,7 +436,7 @@ ln -s /etc/config/orange-auth-init.sh /etc/init.d/orange-auth
 
 ## Tests de vie
 
-Comme expliqué [ici](https://lafibre.info/remplacer-livebox/durcissement-du-controle-de-loption-9011-et-de-la-conformite-protocolaire/), il est recommandé de vérifier l'état de votre connections. Le script suivant suit exactement ces recommandations:  
+Comme expliqué [ici](https://lafibre.info/remplacer-livebox/durcissement-du-controle-de-loption-9011-et-de-la-conformite-protocolaire/), il est recommandé de vérifier l'état de votre connection. Le script suivant suit exactement ces recommandations:  
 - IPv4 : faire une séquence ARP Request / Reply vers l'adresse du routeur donné en DHCPv4  
 - IPv6 : faire une séquence ICMP6 NS/NA de fe80::ba0:bab  
 - Pour chacun des deux stack  
@@ -550,7 +550,6 @@ USE_PROCD=1
 start_service() {
     procd_open_instance
     procd_set_param command /etc/config/wan-watchdog.sh
-    procd_set_param respawn
     procd_set_param respawn 3600 5 5
     procd_set_param stdout 1
     procd_set_param stderr 1
