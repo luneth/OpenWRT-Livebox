@@ -4,7 +4,7 @@ Guide lourdement basé (pour ainsi dire, copié à 99% sur le travail de ubune (
 
 Le but étant de centraliser toutes ces informations à un seul endroit.
 
-## Table of Contents
+## Sommaire
 - [Prerequis](#prerequis)
 - [Informations sur Openwrt](#informations-sur-openwrt)
 - [PARTIE 1 : INTERNET](#partie-1--internet)
@@ -13,9 +13,9 @@ Le but étant de centraliser toutes ces informations à un seul endroit.
   - [Le pare-feu](#le-pare-feu)
   - [Le DCHP](#le-dhcp)
 - [PARTIE 2 : Auto-gen de l'option 90/11 & Heathchecks](#partie-2--auto-gen-de-loption-9011--heathchecks)
-  - [Génération automatique de l'option 90](#generation-automatique-de-loption-90)
+  - [Génération automatique de l'option 90](#g%C3%A9n%C3%A9ration-automatique-de-loption-90)
   - [Tests de vie](#tests-de-vie)
-- [PARTIE 3 : Télévision](#partie-3--television)
+- [PARTIE 3 : Télévision](#partie-3--t%C3%A9l%C3%A9vision)
 
 ## Prerequis
 
