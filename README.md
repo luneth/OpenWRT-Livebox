@@ -4,53 +4,73 @@ Guide lourdement basé (pour ainsi dire, copié à 99% sur le travail de ubune (
 
 Le but étant de centraliser toutes ces informations à un seul endroit.
 
+## Table of Contents
+- [Prerequis](#prerequis)
+- [Informations sur Openwrt](#informations-sur-openwrt)
+- [PARTIE 1 : INTERNET](#partie-1--internet)
+  - [Authentification Orange](#authentification-orange)
+  - [Les interfaces](#les-interfaces)
+  - [Le pare-feu](#le-pare-feu)
+  - [Le DCHP](#le-dhcp)
+- [PARTIE 2 : Auto-gen de l'option 90/11 & Heathchecks](#partie-2--auto-gen-de-loption-9011--heathchecks)
+  - [Génération automatique de l'option 90](#generation-automatique-de-loption-90)
+  - [Tests de vie](#tests-de-vie)
+- [PARTIE 3 : Télévision](#partie-3--television)
 
-**Prerequis :**  
-  
-Avoir un ONT Orange ou un ONT perso bien connecté/auth avec l'OLT, Leox LXT-010H-D, fs.com GPON-ONU-34-20BI, etc…  
-Avoir récupéré ses identifiants FTI.  
-Un routeur compatible openwrt et avec assez de perf pour gérer le débit de votre offre.  
-  
-**Informations sur Openwrt =>**  
-  
-Pour récupérer votre version, il faut identifier le soc de votre routeur, exemple sur un ubiquiti edgerouterx => <https://openwrt.org/toh/hwdata/ubiquiti/ubiquiti_edgerouter_x>  
-On retrouve dans target : ramips et subtarget : mt7621.  
-Une fois ces éléments identifiés, on peut aller sur <https://downloads.openwrt.org> pour récupérer la version correspondante.  
-  
-**Présentation rapide de l'architecture Openwrt :**  
-  
-Sur Openwrt, vos fichiers de configurations se trouvent dans **/etc/config**, par exemple par défaut on retrouve :  
-**/etc/config/network** pour la configuration des interfaces réseau, des routes statiques...  
-**/etc/config/Firewall** pour la configuration du parefeu, du nat, des zones etc.  
+## Prerequis
+
+Avoir un ONT Orange ou un ONT perso bien connecté/auth avec l'OLT, Leox LXT-010H-D, fs.com GPON-ONU-34-20BI, etc…
+Avoir récupéré ses identifiants FTI.
+Un routeur compatible openwrt et avec assez de perf pour gérer le débit de votre offre.
+
+## Informations sur Openwrt  
+
+Pour récupérer votre version, il faut identifier le soc de votre routeur, exemple sur un ubiquiti edgerouterx => <https://openwrt.org/toh/hwdata/ubiquiti/ubiquiti_edgerouter_x>
+On retrouve dans target : ramips et subtarget : mt7621.
+Une fois ces éléments identifiés, on peut aller sur <https://downloads.openwrt.org> pour récupérer la version correspondante.
+
+**Présentation rapide de l'architecture Openwrt :**
+
+Sur Openwrt, vos fichiers de configurations se trouvent dans **/etc/config**, par exemple par défaut on retrouve :
+**/etc/config/network** pour la configuration des interfaces réseau, des routes statiques...
+**/etc/config/Firewall** pour la configuration du parefeu, du nat, des zones etc.
 **/etc/config/dhcp** pour la config des serveurs dhcp/dhcpv6 et les annonces RA ipv6...).
 
-Nativement, l'interface Wan est en dhcp (client) et l'interface Lan (ou br-lan) est configurée en 192.168.1.1/24 en dhcp (serveur) et avec annonce d'un préfixe ULA, le routeur est joignable en ssh/https  
-user **root** mdp vide.  
-  
-  
-# __PARTIE 1 : INTERNET__
-  
-Récupérez votre login/pass FTI, et direction <https://jsfiddle.net/kgersen/3mnsc6wy/> (Merci !) pour générer votre option 90.  
-Dans ce tuto, nous simulons le login suivant :  
-fti/qpq8888  
+Nativement, l'interface Wan est en dhcp (client) et l'interface Lan (ou br-lan) est configurée en 192.168.1.1/24 en dhcp (serveur) et avec annonce d'un préfixe ULA, le routeur est joignable en ssh/https
+user **root** mdp vide.
+
+## Le plan
+
+Pour remplacer la livebox par votre propre routeur nous avons besoin :
+
+- De votre option 90 générée grâce au script de kgersen. (Ci-dessous)
+- De configurer l'interface Wan en utilisant le VLAN 832 en dhcp => **/etc/config/network**
+- D'envoyer les bonnes options dhcp permettant l'authentification auprès d'orange  => **/etc/config/network**
+- D'envoyer tout le flux qui ne passe pas par nftables en priorité L2 (802.1p) CS6 => **/etc/config/network (egress mapping)**
+- Gérer les files pour éviter les pbs de débit (on remet bien notre traffic internet avec des priorités cohérentes) => **nft rules**
+- De l'adresse mac de votre livebox (ou d'une adresse mac fixe, qui sera associé à l'interface vlan 832 **__et__** aux options "client ID" envoyées.
+
+En option:
+- D'ajouter le VLAN 840 et igmpproxy pour le décodeur TV d'orange **/etc/config/network**
+
+
+# PARTIE 1 : INTERNET
+
+## Authentification Orange
+
+Récupérez votre login/pass FTI, et direction <https://jsfiddle.net/kgersen/3mnsc6wy/> (Merci !) pour générer votre option 90.
+Dans ce tuto, nous simulons le login suivant :
+fti/qpq8888
 12345622
 
 Qui donne :
 
-`00000000000000000000001a090000055801034101116674692F6674692F717071383838383c1231323334353637383930313233343536031341302f6f2d83fc857d7829d65ddea775d7`  
+`00000000000000000000001a090000055801034101116674692F6674692F717071383838383c1231323334353637383930313233343536031341302f6f2d83fc857d7829d65ddea775d7`
 
-Pour remplacer la livebox par votre propre routeur nous avons besoin :  
-  
-- De votre option 90 générée grâce au script de kgersen.  
-- De configurer l'interface Wan en utilisant le VLAN 832 en dhcp => **/etc/config/network**  
-- D'envoyer les bonnes options dhcp permettant l'authentification auprès d'orange  => **/etc/config/network**  
-- D'envoyer tout le flux qui ne passe pas par nftables en priorité L2 (802.1p) CS6 => **/etc/config/network (egress mapping)**   
-- Gérer les files pour éviter les pbs de débit (on remet bien notre traffic internet avec des priorités cohérentes) => **nft rules**  
-- De l'adresse mac de votre livebox (ou d'une adresse mac fixe, qui sera associé à l'interface vlan 832 **__et__** aux options "client ID" envoyées.  
-  
-  
-**nano /etc/config/network**  
-  
+## Les Interfaces
+
+**nano /etc/config/network**
+
 Dans le fichier network on doit retrouver :
 
 - Config Lan :
@@ -64,8 +84,8 @@ config interface 'lan'`
         option device 'br-lan'
 ```
 
-- Config eth0.832 avec mapping :  
-  
+- Config eth0.832 avec mapping :
+
 *Attention, n'hésitez pas à creer la sous interface wan "vlan832" depuis l'interface web (luci) et ensuite d'aller voir votre fichier network, car en fonction du modèle de routeur ce n'est pas exactement le même nom d'interface (intf physique).*  
 *Dans notre cas, le wan du routeur est "eth0", mais chez certains, il se nomme "wan" ou "eth1".*
 ```
@@ -77,7 +97,7 @@ config device
         list egress_qos_mapping '6:6'
         option macaddr 'A2:34:56:78:19:26' # A remplacer par l'adresse mac de votre livebox, ne pas oublier le client id plus bas qui doit avoir la meme valeur que l'adresse mac de votre interface wan !
 ```
-  
+
 - Config Wan ipv4 :
 ```
 config interface 'wan4'
@@ -121,6 +141,8 @@ config interface 'wan6'
         option clientid '00030001A23456781926' # Doit correspondre à 00030001 + l'adresse mac sans les : de votre interface vlan 832 !
 ```
 
+## Le pare-feu
+
 NFT rules, on créé un fichier contenant nos règles (pour le remapping l2 des flux), qui sera lancé en même temps que le firewall
 
 **Installez kmod-nft-netdev:**
@@ -148,8 +170,7 @@ table netdev orange-rules {
 }
 ```
 
-  
-  
+
 **nano /etc/config/firewall**
 
 ```
@@ -272,9 +293,11 @@ config forwarding
 	option dest 'wan6'
 ```
 
+## Le DHCP
+
 DHCPv4 + RA (ipv6, Router Advertisement), pour le LAN:
 
-**nano /etc/config/dhcp**  
+**nano /etc/config/dhcp**
 *Ici on ne fait pas de dhcpv6, uniquement du RA, on annonce le premier /64 du /56 au lan (pour l'autoconfiguration des machines) + serveur dhcpv4.*
 ```
 config dhcp 'lan'
@@ -287,13 +310,13 @@ config dhcp 'lan'
 	list ra_flags 'none'
 ```
 
-Une fois tout ceci fait, vous pouvez supprimer votre livebox et connecter directement votre nouveau routeur openwrt sur l'ont orange. Vous devriez recevoir votre ip publique ainsi que votre /56 sur l'eth0.832.  
-  
-Commandes utiles pour vérifier tout ça  :  
-**ifstatus wan4**  
+Une fois tout ceci fait, vous pouvez supprimer votre livebox et connecter directement votre nouveau routeur openwrt sur l'ont orange. Vous devriez recevoir votre ip publique ainsi que votre /56 sur l'eth0.832.
+
+Commandes utiles pour vérifier tout ça  :
+**ifstatus wan4**
 **ifstatus wan6** 
 
-# __PARTIE 2 : Auto-gen de l'option 90/11 & Heathchecks__
+# PARTIE 2 : Auto-gen de l'option 90/11 & Heathchecks
 ## Génération automatique de l'option 90
 
 Même si pour certains (moi y compris) garder l'option 90 générée au début du tutoriel ne pose pas de soucis, l'identification auprès d'orange est sensée être re-générée régulièrement.  
@@ -436,13 +459,13 @@ ln -s /etc/config/orange-auth-init.sh /etc/init.d/orange-auth
 
 ## Tests de vie
 
-Comme expliqué [ici](https://lafibre.info/remplacer-livebox/durcissement-du-controle-de-loption-9011-et-de-la-conformite-protocolaire/), il est recommandé de vérifier l'état de votre connection. Le script suivant suit exactement ces recommandations:  
-- IPv4 : faire une séquence ARP Request / Reply vers l'adresse du routeur donné en DHCPv4  
-- IPv6 : faire une séquence ICMP6 NS/NA de fe80::ba0:bab  
-- Pour chacun des deux stack  
-  - faire une séquence toutes les 120s  
-  - en cas de non réponse au bout de 10s , faire 2 répétitions  
-  - au 3ème timeout (donc au total 150s de timeout), considérer que la liaison est en échec  
+Comme expliqué [ici](https://lafibre.info/remplacer-livebox/durcissement-du-controle-de-loption-9011-et-de-la-conformite-protocolaire/), il est recommandé de vérifier l'état de votre connection. Le script suivant suit exactement ces recommandations:
+- IPv4 : faire une séquence ARP Request / Reply vers l'adresse du routeur donné en DHCPv4
+- IPv6 : faire une séquence ICMP6 NS/NA de fe80::ba0:bab
+- Pour chacun des deux stack
+  - faire une séquence toutes les 120s
+  - en cas de non réponse au bout de 10s , faire 2 répétitions
+  - au 3ème timeout (donc au total 150s de timeout), considérer que la liaison est en échec
 relancer CE stack
 
 *Pensez à modifier DEV=”eth0.832” en fonction de votre interface*
@@ -564,7 +587,7 @@ chmod +x /etc/config/wan-watchdog.sh /etc/config/wan-watchdog-init.sh
 ln -s /etc/config/wan-watchdog-init.sh /etc/init.d/wan-watchdog
 /etc/init.d/wan-watchdog enable
 ``` 
-# __PARTIE 3 : Télévision__
+# PARTIE 3 : Télévision
 Installation d'igmp proxy :
 ```
 apk update && apk install igmpproxy
