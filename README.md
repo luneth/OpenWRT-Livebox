@@ -618,14 +618,6 @@ config device
         option type '8021q'
         option ifname 'eth0'
         option vid '840'
-        list egress_qos_mapping '0:5'
-        list egress_qos_mapping '1:5'
-        list egress_qos_mapping '2:5'
-        list egress_qos_mapping '3:5'
-        list egress_qos_mapping '4:5'
-        list egress_qos_mapping '5:5'
-        list egress_qos_mapping '6:5'
-        list egress_qos_mapping '7:5'
 
 config interface 'tvorange'
         option device 'eth0.840'
@@ -639,6 +631,13 @@ Toujours dans /etc/config/network
 On ajoute à la conf lan la ligne suivante :
 ```
 option igmp_snooping '1'
+```
+
+On fixe la prio attendue par orange pour l'igmp sortant du vlan840:
+
+**nano /etc/nftables.d/orange-prio.include**
+```
+vlan id 840 ip protocol igmp vlan pcp set 5 ip dscp set cs4 counter accept
 ```
 
 On modifie le fichier /etc/config/dhcp pour envoyer les dns d'orange, et l'option 125 :
