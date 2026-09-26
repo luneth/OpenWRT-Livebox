@@ -524,6 +524,8 @@ check_ipv6() {
         [ $COUNT -le $MAX_RETRY ] && sleep $COOLDOWN
     done
 
+    [ -z "$GWv6" ] && return 1
+
     GWv6="${GWv6}%${DEV}"
 
     COUNT=1
