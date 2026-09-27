@@ -123,7 +123,7 @@ config interface 'wan4'
 ```
 config interface 'wan6'
         option proto 'dhcpv6'
-        option auto '0'
+        option auto '1'
         option reqaddress 'none'
         option reqprefix 'auto'
         option defaultreqopts '0'
@@ -320,6 +320,7 @@ Commandes utiles pour vérifier tout ça  :
 ## Génération automatique de l'option 90
 
 Même si pour certains (moi y compris) garder l'option 90 générée au début du tutoriel ne pose pas de soucis, l'identification auprès d'orange est sensée être re-générée régulièrement.  
+Le script sera lancé à chaque démarrage du routeur et, si le script de test de vie installé, à chaque perte de connection simultanée sur les interfaces wan4 et wan6.
 
 *Modifiez Login et PASSWORD avec vos identifiants*
 
@@ -408,51 +409,10 @@ start() {
 }
 ```
 
-**nano /etc/config/97-orange-config**
-```
-#!/bin/sh
-
-# Orange hotplug script - renews AUTH on wan ifdown to avoid Orange rejecting old auth
-
-# integration in openwrt 25.12
-# ln -s /etc/config/97-orange-config /etc/hotplug.d/iface/97-orange-config
-
-case "$ACTION/$INTERFACE" in
-    ifdown/wan4)
-        logger -t orange-config "wan4 down, pre-generating auth for next ifup"
-        /etc/config/orange-gen-auth.sh
-        ifdown wan6
-        ;;
-esac
-```
-
-**nano /etc/config/99-wan6-delay**
-```
-#!/bin/sh
-
-# Delays wan6 ifup until wan DHCP completes - prevents wan6 failure on Orange network
-
-# integration in openwrt 25.12
-# ln -s /etc/config/99-wan6-delay /etc/hotplug.d/iface/99-wan6-delay
-
-case "$ACTION/$INTERFACE" in
-    ifup/wan4)
-        logger -t wan6-delay "wan DHCPv4 up >>>>>>>>>>>>>>>>>>>> sleeping before wan6 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-        sleep 3
-        ifup wan6
-        ;;
-    ifdown/wan4)
-        ifdown wan6
-        ;;
-esac
-```
-
-Activer les service:
+Activer le service:
 
 ```
-chmod +x /etc/config/orange-auth-init.sh /etc/config/orange-gen-auth.sh /etc/config/97-orange-config /etc/config/99-wan6-delay
-ln -s /etc/config/97-orange-config /etc/hotplug.d/iface/97-orange-config
-ln -s /etc/config/99-wan6-delay /etc/hotplug.d/iface/99-wan6-delay
+chmod +x /etc/config/orange-auth-init.sh /etc/config/orange-gen-auth.sh
 ln -s /etc/config/orange-auth-init.sh /etc/init.d/orange-auth
 /etc/init.d/orange-auth enable
 ```
@@ -468,6 +428,8 @@ Comme expliqué [ici](https://lafibre.info/remplacer-livebox/durcissement-du-con
   - au 3ème timeout (donc au total 150s de timeout), considérer que la liaison est en échec
 relancer CE stack
 
+Ajouté à ces directions, en cas d'échec simultanée des deux interfaces, on considère que nos chaines d'authentification 11 & 90 soient "périmées", on appelle donc notre script de génération avant de relancer les deux stacks.
+
 *Pensez à modifier DEV=”eth0.832” en fonction de votre interface*
 
 **nano /etc/config/wan-watchdog.sh**
@@ -478,11 +440,12 @@ relancer CE stack
 DEV="eth0.832"
 IF4="wan4"
 IF6="wan6"
-
+AUTH_SCRIPT="/etc/config/orange-gen-auth.sh"
 
 MAX_RETRY=3
 TIMEOUT=3
 COOLDOWN=10
+INTERVAL=120
 
 get_gw4() {
     ubus call network.interface.$IF4 status | jsonfilter -e '@["route"][0].nexthop'
@@ -543,6 +506,7 @@ restart_ipv4() {
     ifdown $IF4
     sleep 3
     ifup $IF4
+    logger -t wan-watchdog "wan4 restart completed"
 }
 
 restart_ipv6() {
@@ -550,12 +514,40 @@ restart_ipv6() {
     ifdown $IF6
     sleep 3
     ifup $IF6
+    logger -t wan-watchdog "wan6 restart completed"
+}
+
+dual_failure() {
+    logger -t wan-watchdog "wan4 and wan6 failure > pre-generating auth prior restarting interfaces"
+    if [ -x "$AUTH_SCRIPT" ]; then
+    "$AUTH_SCRIPT" || {
+        logger -t wan-watchdog "ERROR: orange-gen-auth script failed"
+        return 1
+    }
+        logger -t wan-watchdog "Restarting wan4 and wan6"
+        ifdown $IF4
+        ifdown $IF6
+        sleep 3
+        ifup $IF4
+        ifup $IF6
+        logger -t wan-watchdog "wan4 and wan6 restart completed"
+    else
+        logger -t wan-watchdog "ERROR: orange-gen-auth script not found or not executable: $AUTH_SCRIPT"
+    fi
 }
 
 while true; do
-    check_ipv4 || restart_ipv4
-    check_ipv6 || restart_ipv6
-    sleep 120
+    check_ipv4
+    IPV4_OK=$
+
+    check_ipv6
+    IPV6_OK=$
+
+    [ $IPV4_OK -ne 0 ] && [ $IPV6_OK -ne 0 ] && dual_failure
+    [ $IPV4_OK -ne 0 ] && [ $IPV6_OK -eq 0 ] && restart_ipv4
+    [ $IPV4_OK -eq 0 ] && [ $IPV6_OK -ne 0 ] && restart_ipv6
+
+    sleep $INTERVAL
 done
 ```
 
