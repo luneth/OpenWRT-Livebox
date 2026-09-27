@@ -537,11 +537,17 @@ dual_failure() {
 }
 
 while true; do
-    check_ipv4
-    IPV4_OK=$
+    check_ipv4 &
+    ipv4_pid=$!
 
-    check_ipv6
-    IPV6_OK=$
+    check_ipv6 &
+    ipv6_pid=$!
+
+    wait "$ipv4_pid"
+    IPV4_OK=$?
+
+    wait "$ipv6_pid"
+    IPV6_OK=$?
 
     [ $IPV4_OK -ne 0 ] && [ $IPV6_OK -ne 0 ] && dual_failure
     [ $IPV4_OK -ne 0 ] && [ $IPV6_OK -eq 0 ] && restart_ipv4
