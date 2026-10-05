@@ -162,7 +162,7 @@ table netdev orange-rules {
                 type filter hook egress device "eth0" priority 0; policy accept; 
                 vlan id 832 ip6 udp dport 547 vlan pcp set 6 ip6 dscp set cs6 counter accept
                 vlan id 832 ip6 icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit } vlan pcp set 6 ip6 dscp set cs6 counter accept
-                vlan id 832 ip6 dscp set cs0 counter accept
+                vlan id 832 ip6 ip6 dscp set cs0 counter accept
                 vlan id 832 ip udp dport 67 vlan pcp set 6 ip dscp set cs6 counter accept
                 vlan id 832 ip ip dscp set cs0 counter accept
                 vlan id 832 arp vlan pcp set 6 counter accept
