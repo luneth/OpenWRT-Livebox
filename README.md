@@ -160,10 +160,10 @@ flush table netdev orange-rules
 table netdev orange-rules {
         chain orange-rules-chain {
                 type filter hook egress device "eth0" priority 0; policy accept;
-                vlan id 832 ip6 meta l4proto udp udp dport 547 vlan pcp set 6 ip6 dscp set cs6 counter accept
-                vlan id 832 ip6 meta l4proto icmpv6 icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit } vlan pcp set 6 ip6 dscp set cs6 counter accept
+                vlan id 832 meta l4proto udp udp dport 547 vlan pcp set 6 ip6 dscp set cs6 counter accept
+                vlan id 832 meta l4proto icmpv6 icmpv6 type { echo-request, echo-reply, nd-neighbor-solicit, nd-neighbor-advert, nd-router-solicit } vlan pcp set 6 ip6 dscp set cs6 counter accept
                 vlan id 832 ip6 dscp set cs0 counter accept
-                vlan id 832 ip protocol udp udp dport 67 vlan pcp set 6 ip dscp set cs6 counter accept
+                vlan id 832 meta l4proto udp udp dport 67 vlan pcp set 6 ip dscp set cs6 counter accept
                 vlan id 832 ip dscp set cs0 counter accept
                 vlan id 832 vlan type arp vlan pcp set 6 counter accept
         }
