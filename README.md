@@ -430,6 +430,10 @@ relancer CE stack
 
 Ajouté à ces directions, en cas d'échec simultanée des deux interfaces, on considère que nos chaines d'authentification 11 & 90 soient "périmées", on appelle donc notre script de génération avant de relancer les deux stacks.
 
+**Installez iputils-arping:**
+```
+apk update && apk install iputils-arping
+```
 *Pensez à modifier DEV=”eth0.832” en fonction de votre interface*
 
 **nano /etc/config/wan-watchdog.sh**
@@ -446,6 +450,11 @@ MAX_RETRY=3
 TIMEOUT=3
 COOLDOWN=10
 INTERVAL=120
+
+command -v arping >/dev/null 2>&1 || {
+    logger -t wan-watchdog "ERROR: arping is not installed."
+    exit 1
+}
 
 get_gw4() {
     ubus call network.interface.$IF4 status | jsonfilter -e '@["route"][0].nexthop'
