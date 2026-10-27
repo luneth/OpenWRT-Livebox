@@ -115,8 +115,10 @@ config interface 'wan4'
         list sendopts '77:2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836' # User Class: 2b46535644534c5f6c697665626f782e496e7465726e65742e736f66746174686f6d652e4c697665626f7836 = FSVDSL_livebox.Internet.softathome.Livebox6
         list sendopts '90:00000000000000000000001a090000055801034101116674692F6674692F717071383838383c1231323334353637383930313233343536031341302f6f2d83fc857d7829d65ddea775d7' # XAUT: à remplacer par votre chaine générée précédemment
         option force_link '1'
+        option multipath 'off'
         option device 'eth0.832' # A remplacer par votre interface
-        option norelease '1' 
+        option norelease '1'
+        option sendclientid 'auto'
         option clientid '01A23456781926' # Doit correspondre à 01 + l'adresse mac sans les : de votre interface vlan 832 !
 ```
 - Config Wan ipv6
@@ -138,6 +140,8 @@ config interface 'wan6'
         option device 'eth0.832' # A remplacer par votre interface
         option dscp '6'
         option skpriority '6'
+        option multipath 'off'
+        option sendclientid 'auto'
         option clientid '00030001A23456781926' # Doit correspondre à 00030001 + l'adresse mac sans les : de votre interface vlan 832 !
 ```
 
@@ -634,6 +638,7 @@ config interface 'tvorange'
         option ipaddr '192.168.255.254'
         option netmask '255.255.255.255'
         option delegate '0'
+        option multipath 'off'
 ```
 
 Toujours dans /etc/config/network
